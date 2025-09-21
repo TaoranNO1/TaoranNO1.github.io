@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AIGC互动广告实验 - 奶茶</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; padding: 40px; background-color: #fff5f5; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { color: #e67e22; }
+        button { padding: 12px; margin: 20px; background-color: #e67e22; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; }
+        button:hover { background-color: #d35400; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        #generatedImage { max-width: 100%; border-radius: 10px; margin-top: 20px; display: none; }
+        #statusText { margin: 15px; font-style: italic; color: #666; }
+        #uploadLabel { display: block; margin: 15px auto; padding: 15px; background: #fdcb6e; color: white; border-radius: 8px; cursor: pointer; width: 60%; font-size: 18px; }
+        #imageUpload { display: none; }
+        #previewContainer { margin: 20px auto; max-width: 300px; }
+        #previewImage { max-width: 100%; max-height: 200px; border-radius: 8px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🧋 奶茶灵感生成器 🧋</h2>
+        <p>请为我们的<strong>新品珍珠奶茶</strong>创作一张AIGC广告图</p>
+        <p>请<strong>上传一张天空图片</strong>来生成专属广告</p>
+
+        <!— 上传图片选项 —>
+        <label for="imageUpload" id="uploadLabel">📷 点击上传灵感图片</label>
+        <input type="file" id="imageUpload" accept="image/*">
+        
+        <!— 图片预览区域 —>
+        <div id="previewContainer">
+            <img id="previewImage" src="">
+        </div>
+
+        <p id="fileName" style="font-size: 14px; color: #999; margin: 10px;"></p>
+
+        <button id="generateBtn" onclick="simulateGeneration()" disabled>🎨 生成广告</button>
+        <br>
+
+        <!— 显示生成状态和结果 —>
+        <p id="statusText">请先上传一张图片</p>
+        <img id="generatedImage" src="">
+    </div>
+
+    <script>
+        // ！！！第一步：在这里填入你的问卷星完整链接！！！
+        const surveyUrl = "这里替换成你的问卷星链接";
+
+        // 获取页面元素
+        const imageUpload = document.getElementById('imageUpload');
+        const previewImage = document.getElementById('previewImage');
+        const fileName = document.getElementById('fileName');
+        const generateBtn = document.getElementById('generateBtn');
+        const statusText = document.getElementById('statusText');
+
+        // 监听文件上传
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // 显示文件名
+                fileName.textContent = `已选择: ${file.name}`;
+                
+                // 预览图片
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+                
+                // 启用生成按钮
+                generateBtn.disabled = false;
+                statusText.textContent = "图片已上传！点击'生成广告'按钮继续";
+            }
+        });
+
+        function simulateGeneration() {
+            const statusText = document.getElementById('statusText');
+            const imageElement = document.getElementById('generatedImage');
+
+            // 1. 显示生成中的状态
+            statusText.innerHTML = "AI正在分析您的图片，生成专属奶茶广告中...";
+            generateBtn.disabled = true;
+
+            // 2. 模拟AIGC生成等待效果（3秒钟）
+            setTimeout(function() {
+                // 3. 显示一个模拟的“生成结果”
+                // ！！！第二步：将下面的链接替换成您自己准备好的奶茶图片链接！！！
+                imageElement.src = "https://github.com/TaoranNO1/taoranno1.github.io/blob/main/tea.png?raw=true";
+                imageElement.style.display = 'block';
+                statusText.innerHTML = "生成成功！基于您的图片创作的广告已出炉。请点击下方按钮前往填写问卷。";
+
+                // 4. 创建并显示“下一步”按钮
+                const nextButton = document.createElement('button');
+                nextButton.innerHTML = '下一步，填写问卷';
+                nextButton.onclick = function() {
+                    window.location.href = surveyUrl;
+                };
+                document.body.appendChild(nextButton);
+
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
